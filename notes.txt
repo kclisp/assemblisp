@@ -1,0 +1,3 @@
+Macros need to be interpreted in assemblisp.
+Write an interpreter in c
+      - Necessary because low level is needed to macroexpand

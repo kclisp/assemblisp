@@ -1,0 +1,14 @@
+# write(1, message, 1)
+(mov 1 eax)
+(mov 1 edi)
+(mov message esi)
+(mov 13 edx)
+(syscall)
+
+# exit(0)
+(mov 60 eax)
+(xor edi edi)
+(syscall)
+
+(label message)
+(bytes 68 69 00)
