@@ -3,5 +3,6 @@
 
 #include "types.h"
 
+void interpret(Form *form);
 
 #endif

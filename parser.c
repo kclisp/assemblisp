@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "form.h"
@@ -14,6 +13,7 @@ static char buf[BUF_SIZE];
   Returns the corresponding Form.
   Returns NULL if there is no form.
 */
+// Remember to free
 Form *read_form(FILE *stream) {
   // Go until you can determine whether the form is a list or atom
   // then use read_list or read_atom
@@ -102,6 +102,7 @@ char *read_atom(FILE *stream) {
   return str;
 }
 
+/*
 int main(int argc, char **argv) {
   Form *form = read_form(stdin);
   if (form) {
@@ -110,3 +111,4 @@ int main(int argc, char **argv) {
   } else
     printf("Null form!");
 }
+*/

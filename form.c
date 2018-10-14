@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include "form.h"
 
@@ -10,6 +9,23 @@ void add_to_list(List **next, Form *data) {
   (*next)->next = new_list;
   *next = new_list;
   new_list->data = data;
+}
+
+//does not handle circular references...
+void free_form(Form *form) {
+  if (form->type == ATOM) {
+    free(form->a);
+  } else {
+    List *next = form->l;
+    List *temp;
+    while (next) {
+      free_form(next->data);
+      temp = next->next;
+      free(next);
+      next = temp;
+    }
+  }
+  free(form);
 }
 
 void print_form(Form *form) {
