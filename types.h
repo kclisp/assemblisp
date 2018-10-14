@@ -18,8 +18,8 @@ struct Form {
   };
 };
 
-//adjustable array
-struct Adjustarr {
+//executable memory block
+struct Memblock {
   char *start;
   char *at;
   size_t size;
@@ -27,6 +27,6 @@ struct Adjustarr {
 
 typedef struct List List;
 typedef struct Form Form;
-typedef struct Adjustarr Adjustarr; 
+typedef struct Memblock Memblock;
 
 #endif

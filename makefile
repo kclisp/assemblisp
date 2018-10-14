@@ -1,5 +1,5 @@
-DEPS = compiler.h types.h form.h parser.h adjustarr.h assembler.h
-OBJ = compiler.o form.o parser.o adjustarr.o assembler.c
+DEPS = compiler.h types.h form.h parser.h memblock.h assembler.h
+OBJ = compiler.o form.o parser.o memblock.o assembler.c
 EXEC = compiler
 
 %.o: %.c $(DEPS)
