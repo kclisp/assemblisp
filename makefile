@@ -1,13 +1,14 @@
-DEPS = interp.h types.h form.h parser.h adjustarr.h assembler.h
-OBJ = interp.o form.o parser.o adjustarr.o assembler.c
+DEPS = compiler.h types.h form.h parser.h adjustarr.h assembler.h
+OBJ = compiler.o form.o parser.o adjustarr.o assembler.c
+EXEC = compiler
 
 %.o: %.c $(DEPS)
 	gcc -c -o $@ $<
 
-interp: $(OBJ)
+$(EXEC): $(OBJ)
 	gcc -o $@ $^
 
 .PHONY: clean
 
 clean:
-	rm -f *.o *~ */*~ interp
+	rm -f *.o *~ */*~ $(EXEC)
