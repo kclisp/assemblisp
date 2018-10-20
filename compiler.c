@@ -7,20 +7,18 @@
 #include "parser.h"
 #include "form.h"
 #include "compiler.h"
+#include "env.h"
 /// Compiler for assemblisp
 
 #define INIT_MEM_SIZE 4096
 //keep track of the block of memory where the code is being stored
 Memblock *code_mem;
-/*
-//keep track of labels
-Adjustarr *env;
-*/
+//keep track of addresses (labels, functions(?)) and variables
+extern Env_entry *env;
 
 // initializing code for the compiler
 void init_compiler() {
   code_mem = init_memblock(INIT_MEM_SIZE);
-  //env = init_adjustarr(calloc(1, INIT_MEM_SIZE), INIT_MEM_SIZE);
 }
 
 /* Given lisp form:
@@ -28,7 +26,7 @@ void init_compiler() {
    if label, store address at that point under corresponding name in env
    if special, do special things
    [if macro, macroexpand]
-*/
+n*/
 // compile single lisp form
 void compile(Form *form) {
   if (form->type == ATOM) {
@@ -44,11 +42,7 @@ void compile(Form *form) {
   if (is_mnemonic(form)) {
     write_opcode(form);
   } else if (strcmp(atom, "label") == 0) {
-    //should use hashtable eventually
-    /*
-    append(env, &form->l->next->data->a, sizeof(char *));
-    append(env, &code_mem->at, sizeof(char *));
-    */
+    add_entry(form->l->next->data->a, code_mem->at);
   } else if (strcmp(atom, "bytes") == 0) {
     write_bytes(form->l->next);
   } else {
@@ -62,8 +56,8 @@ void write_bytes(List *list) {
   long l;
   for (; list; list = list->next) {
     // sanity check
-    if (list->data->type != ATOM) {
-      printf("Type in bytes is not an atom!\n");
+    if (list->data->type == LIST) {
+      printf("bytes is a list in list!");
       return;
     }
     l = strtol(list->data->a, NULL, 16);
@@ -85,11 +79,14 @@ void print_code_mem () {
 int main(int argc, char **argv) {
   init_compiler();
   print_code_mem();
+  
   Form *form = read_form(fopen("examples/bytes.alisp", "r"));
   print_form(form);
   printf("\n");
+  
   compile(form);
   print_code_mem();
+  
   // execute it
   long res;
   asm ("call %0;"

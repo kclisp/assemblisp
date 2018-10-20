@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <stdlib.h>
+#include "uthash.h"
 
 struct List {
   struct Form *data;
@@ -25,8 +26,16 @@ struct Memblock {
   size_t size;
 };
 
+//an environment entry
+struct Env_entry {
+  char *name;    //key
+  char *ptr;     //val
+  UT_hash_handle hh;    //make it hashable
+};
+  
 typedef struct List List;
 typedef struct Form Form;
 typedef struct Memblock Memblock;
+typedef struct Env_entry Env_entry;
 
 #endif

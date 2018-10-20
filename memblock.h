@@ -5,5 +5,6 @@
 
 Memblock *init_memblock(size_t size);
 void append(Memblock *mem, void *ptr, size_t size);
+void extend(Memblock *mem);
 
 #endif

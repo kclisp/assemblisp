@@ -17,15 +17,20 @@ Memblock *init_memblock(size_t size) {
 
 //automatically extends memory region if necessary
 void append(Memblock *mem, void *ptr, size_t size) {
-  while ((mem->at + size) >= (mem->start + mem->size)) {
-    //need this because start could move due to mremap
-    unsigned dif = mem->at - mem->start;
-    mem->start = mremap(mem->start, mem->size, 2 * mem->size, MREMAP_MAYMOVE);
-    mem->at = mem->start + dif;
-    //zero out
-    memset(mem->at, 0, mem->start + mem->size - mem->at);
-    mem->size *= 2;
-  }
+  while ((mem->at + size) >= (mem->start + mem->size))
+    extend(mem);
   memcpy(mem->at, ptr, size);
   mem->at += size;
+}
+
+void extend(Memblock *mem) {
+  //need this because start could move due to mremap
+  unsigned dif = mem->at - mem->start;
+  
+  mem->start = mremap(mem->start, mem->size, 2 * mem->size, MREMAP_MAYMOVE);
+  mem->at = mem->start + dif;
+  
+  //zero out
+  memset(mem->at, 0, mem->start + mem->size - mem->at);
+  mem->size *= 2;
 }
